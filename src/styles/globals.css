@@ -1,0 +1,29 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+    h1 {
+        @apply text-2xl;
+        @apply font-bold;
+        padding-top: 0.5em;
+        padding-bottom: 0.5em;
+    }
+
+    h2 {
+        @apply text-xl;
+        @apply font-bold;
+        padding-top: 0.25em;
+        padding-bottom: 0.25em;
+    }
+    
+    h3 {
+        @apply text-xl;
+    }
+}
+
+@layer utilities {
+    .gap {
+        @apply gap-2.5;
+    }
+}

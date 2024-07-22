@@ -1,0 +1,39 @@
+﻿{
+  "configurations": [
+    {
+      "name": "QDU Year 11",
+      "speakers": [
+        {
+          "position": "1st",
+          "side": "Affirmative"
+        },
+        {
+          "position": "1st",
+          "side": "Negative"
+        },
+        {
+          "position": "2nd",
+          "side": "Affirmative"
+        },
+        {
+          "position": "2nd",
+          "side": "Negative"
+        },
+        {
+          "position": "3rd",
+          "side": "Affirmative"
+        },
+        {
+          "position": "3rd",
+          "side": "Negative"
+        }
+      ],
+      "bellTimes": {
+        "60": 1,
+        "420": 1,
+        "480": 2,
+        "510": 3
+      }
+    }
+  ]
+}
