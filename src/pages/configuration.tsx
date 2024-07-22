@@ -1,5 +1,8 @@
 ﻿import { useNavigate } from "react-router-dom";
 import { useCallback, useContext, useState } from "react";
+import { Button } from "@nextui-org/button";
+import { Select, SelectItem } from "@nextui-org/react";
+import { Input } from "@nextui-org/input";
 
 import {
   Debate,
@@ -10,10 +13,7 @@ import {
 import LoadDefaultConfigurations from "@/helpers/debate-configuration.ts";
 import BellTimesConfiguration from "@/components/bell-times-configuration.tsx";
 import SpeakersConfiguration from "@/components/speakers-configuration.tsx";
-import { Button } from "@nextui-org/button";
-import { Select, SelectItem } from "@nextui-org/react";
 import DefaultLayout from "@/layouts/default.tsx";
-import { Input } from "@nextui-org/input";
 
 const ConfigurationPage = () => {
   const { setDebate } = useContext(DebateContext);
@@ -38,9 +38,8 @@ const ConfigurationPage = () => {
   }, [editingDebate, navigate]);
 
   return (
-    <DefaultLayout>
+    <DefaultLayout title="Debate Configuration">
       <section>
-        <h1>Debate Configuration</h1>
         <div className="flex gap">
           <Select
             className="max-w-64"
@@ -70,7 +69,7 @@ const ConfigurationPage = () => {
         </div>
       </section>
       {editingDebate !== null && editingConfiguration !== null ? (
-        <section className="grid grid-cols-2 gap">
+        <section className="grid grid-cols-1 md:grid-cols-2 gap">
           <BellTimesConfiguration
             configuration={editingConfiguration}
             setConfiguration={setEditingConfiguration}

@@ -14,6 +14,7 @@ import {
 interface DefaultLayoutProps {
   children: React.ReactNode;
   actions?: MenuAction[];
+  title?: string;
 }
 
 export interface MenuAction {
@@ -22,7 +23,11 @@ export interface MenuAction {
   action: () => {};
 }
 
-const DefaultLayout: React.FC<DefaultLayoutProps> = ({ children, actions }) => {
+const DefaultLayout: React.FC<DefaultLayoutProps> = ({
+  children,
+  actions,
+  title,
+}) => {
   const darkMode = useDarkMode(false);
 
   const toggleTheme = useCallback(() => {
@@ -44,32 +49,35 @@ const DefaultLayout: React.FC<DefaultLayoutProps> = ({ children, actions }) => {
   actions = [...(actions === undefined ? [] : actions), themeToggleAction];
 
   return (
-    <div className="relative flex flex-col h-screen">
-      <Dropdown>
-        <DropdownTrigger>
-          <Button
-            className="absolute top-5 right-5 z-10"
-            isIconOnly={true}
-            variant="light"
-            onClick={() => {}}
+    <main className="container mx-auto max-w-7xl p-6 flex-grow flex flex-col">
+      <div className="flex items-top justify-between pb-2">
+        <h1 className="p-0 self-center">{title ?? ""}</h1>
+        <Dropdown>
+          <DropdownTrigger>
+            <Button
+              className=""
+              isIconOnly={true}
+              variant="light"
+              onClick={() => {}}
+            >
+              <MenuRoundedIcon />
+            </Button>
+          </DropdownTrigger>
+          <DropdownMenu
+            onAction={(key) =>
+              actions[Number.parseInt(key.toString())].action()
+            }
           >
-            <MenuRoundedIcon />
-          </Button>
-        </DropdownTrigger>
-        <DropdownMenu
-          onAction={(key) => actions[Number.parseInt(key.toString())].action()}
-        >
-          {actions.map((action, index) => (
-            <DropdownItem key={index} startContent={action.children}>
-              {action.label}
-            </DropdownItem>
-          ))}
-        </DropdownMenu>
-      </Dropdown>
-      <main className="container mx-auto max-w-7xl px-6 flex-grow flex flex-col gap pt-16">
-        {children}
-      </main>
-    </div>
+            {actions.map((action, index) => (
+              <DropdownItem key={index} startContent={action.children}>
+                {action.label}
+              </DropdownItem>
+            ))}
+          </DropdownMenu>
+        </Dropdown>
+      </div>
+      {children}
+    </main>
   );
 };
 

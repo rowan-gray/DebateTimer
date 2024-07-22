@@ -3,10 +3,11 @@ import { Button } from "@nextui-org/button";
 import { Input } from "@nextui-org/input";
 import AddRoundedIcon from "@mui/icons-material/AddRounded";
 import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
+import { Card } from "@nextui-org/react";
 
 import TimeDisplay from "@/components/time-display.tsx";
 import { Configuration } from "@/App.tsx";
-import { Card } from "@nextui-org/react";
+import OrderedList from "@/components/ordered-list.tsx";
 
 interface BellTimesConfigurationProps {
   configuration: Configuration;
@@ -53,6 +54,22 @@ const BellTimesConfiguration: React.FC<BellTimesConfigurationProps> = ({
       const updatedBellTimes = new Map<number, number>(configuration.bellTimes);
 
       updatedBellTimes.delete(bellTime);
+
+      setConfiguration({
+        ...configuration,
+        bellTimes: updatedBellTimes,
+      });
+    },
+    [configuration, setConfiguration],
+  );
+
+  const setBellTimeEntries = useCallback(
+    (bellTimes: [number, number][]) => {
+      if (configuration === null) {
+        return;
+      }
+
+      const updatedBellTimes = new Map<number, number>(bellTimes);
 
       setConfiguration({
         ...configuration,
@@ -121,38 +138,28 @@ const BellTimesConfiguration: React.FC<BellTimesConfigurationProps> = ({
           </Button>
         </div>
       </div>
-      <div className="flex flex-col gap">
-        {configuration === null
-          ? []
-          : [...configuration.bellTimes.entries()]
-              .sort((a, b) => a[0] - b[0])
-              .map(([ringTime, numberOfBells]) => {
-                return (
-                  <Card
-                    key={ringTime}
-                    className="flex flex-row gap justify-center items-center gap-2"
-                  >
-                    <p className="flex-grow w-max h-min mx-2.5">
-                      <span className="font-bold">{numberOfBells}</span>
-                      {" ring" + (numberOfBells > 1 ? "s" : "") + " at "}
-                      <TimeDisplay
-                        className="font-bold"
-                        millisecondsElapsed={ringTime * 1000}
-                        showMilliseconds={false}
-                      />
-                    </p>
-                    <Button
-                      isIconOnly
-                      color="danger"
-                      variant="light"
-                      onClick={() => removeBell(ringTime)}
-                    >
-                      <CloseRoundedIcon />
-                    </Button>
-                  </Card>
-                );
-              })}
-      </div>
+      {configuration === null ? (
+        []
+      ) : (
+        <OrderedList
+          id="bellTimes"
+          canManuallyOrder={false}
+          displayElement={([ringTime, numberOfBells]) => (
+            <p>
+              <span className="font-bold">{numberOfBells}</span>
+              {" ring" + (numberOfBells > 1 ? "s" : "") + " at "}
+              <TimeDisplay
+                className="font-bold"
+                millisecondsElapsed={ringTime * 1000}
+                showMilliseconds={false}
+              />
+            </p>
+          )}
+          elements={[...configuration.bellTimes.entries()]}
+          getKey={(elem) => elem[0].toString()}
+          setElements={setBellTimeEntries}
+        />
+      )}
     </section>
   );
 };

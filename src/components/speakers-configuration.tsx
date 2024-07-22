@@ -1,8 +1,9 @@
-﻿import React from "react";
+﻿import React, { useCallback } from "react";
 import { Checkbox } from "@nextui-org/checkbox";
 
 import { Configuration, Speaker } from "@/App.tsx";
 import { Button } from "@nextui-org/button";
+import OrderedList from "@/components/ordered-list.tsx";
 
 interface SpeakersConfigurationProps {
   configuration: Configuration;
@@ -16,6 +17,14 @@ const SpeakersConfiguration: React.FC<SpeakersConfigurationProps> = ({
   const [isSymmetricalTeams, setIsSymmetricalTeam] =
     React.useState<boolean>(true);
 
+  const getSpeakerId = (speaker: Speaker): string => {
+    return `${speaker.position} ${speaker.side}`;
+  };
+
+  const setSpeakers = useCallback((Speakers: Speaker[]) => {
+    setConfiguration({ ...configuration, speakers: Speakers });
+  }, []);
+
   return (
     <div>
       <h1>Speaker Configuration</h1>
@@ -25,20 +34,14 @@ const SpeakersConfiguration: React.FC<SpeakersConfigurationProps> = ({
       >
         Symmetrical Teams
       </Checkbox>
-      <>
-        {configuration.speakers.map((speaker: Speaker, i: number) => {
-          return (
-            <div key={i} className="bellTime">
-              <p>
-                {speaker.position} {speaker.side}
-              </p>
-              <Button>UP</Button>
-              <Button>DOWN</Button>
-              <Button>X</Button>
-            </div>
-          );
-        })}
-      </>
+      <OrderedList
+        id="speakers"
+        canManuallyOrder={true}
+        displayElement={(speaker) => <p>{getSpeakerId(speaker)}</p>}
+        elements={configuration.speakers}
+        getKey={getSpeakerId}
+        setElements={setSpeakers}
+      />
     </div>
   );
 };
